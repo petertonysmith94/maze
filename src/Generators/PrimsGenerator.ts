@@ -5,7 +5,7 @@ import Generator from './Generator';
 
 @injectable()
 class PrimsGenerator implements Generator {
-  public generate(width: number, height: number): LinkedList<Maze> {
+  public generate(width: number, height: number): Maze {
     throw new Error('Method not implemented.');
   }
 }

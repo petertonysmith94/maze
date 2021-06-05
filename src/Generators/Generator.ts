@@ -8,9 +8,9 @@ interface Generator {
    * @param {number} width 
    * @param {number} height
    * 
-   * @return {ILinkedList<Maze>} 
+   * @return {Maze} 
    */
-  generate(width: number, height: number): LinkedList<Maze>;
+  generate(width: number, height: number): Maze;
 }
 
 export default Generator;

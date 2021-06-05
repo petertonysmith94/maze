@@ -1,22 +1,41 @@
+import { LinkedList } from '..';
+import PipelineOperation from '../Engine/PipelineOperation';
+import InvalidArgumentException from '../Exceptions/InvalidArgumentException';
+import Grid from './Grid';
 import Node from './Node';
 
 class Maze {
+  /**
+   * @member {number} width
+   * @private
+   */
+  private readonly width: number;
 
-  private width: number;
+  /**
+   * @member {number} height
+   * @private
+   */
+  private readonly height: number;
 
-  private height: number;
+  private readonly grid: Grid;
 
-  private grid: Array<Array<Node>>;
+  public readonly history: LinkedList<Grid>;
 
-  public constructor (width: number, height: number, grid: Array<Array<Node>>) {
-    this.width = width;
-    this.height = height;
+  private readonly operations: LinkedList<PipelineOperation>;
+
+  public constructor (
+    grid: Grid,
+    history: LinkedList<Grid>,
+    operations: LinkedList<PipelineOperation>,
+  ) {
+    this.width = grid.length;
+    this.height = grid[0].length;
     this.grid = grid;
+    this.history = history;
+    this.operations = operations;
   }
 
   public print(): void {
-    let gridString = '';
-
     for (let x = 0; x < this.width; x++) {
       console.group({ x });
 
@@ -27,12 +46,18 @@ class Maze {
       
       console.groupEnd();
     }
+  }
 
-    // console.log({
-    //   width: this.width,
-    //   height: this.height,
-    //   grid: gridString
-    // });
+  public printOperations(): void {
+    let iterator = this.operations.head;
+
+    while (iterator) {
+      console.log({
+        type: iterator.data.type,
+        ...iterator.data.options
+      });
+      iterator = iterator.next;
+    }
   }
 }
 

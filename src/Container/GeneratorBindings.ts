@@ -1,5 +1,6 @@
 import { interfaces } from 'inversify';
 import Types from './Types';
+import MazeFactory from '../Generators/MazeFactory';
 import Generator from '../Generators/Generator';
 import GeneratorNotFound from '../Exceptions/GeneratorNotFound';
 import GeneratorAlgorithm from '../Generators/GeneratorAlgorithm';
@@ -8,6 +9,8 @@ import PrimsGenerator from '../Generators/PrimsGenerator';
 import Bind = interfaces.Bind;
 
 export default (bind: Bind) => {
+  bind<MazeFactory>(Types.MazeFactory).to(MazeFactory);
+
   bind<interfaces.Factory<Generator>>(Types.GeneratorFactory)
     .toFactory((context: interfaces.Context) => {
       return (algorithm: GeneratorAlgorithm) => {
