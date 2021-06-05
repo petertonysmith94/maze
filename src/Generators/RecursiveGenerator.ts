@@ -1,65 +1,34 @@
 import { inject, injectable } from 'inversify';
-import { cloneDeep as deepClone } from 'lodash';
-import LinkedList from '../Utils/LinkedList';
 import Maze from '../Models/Maze';
-import Node from '../Models/Node';
 import Generator from './Generator';
 import Types from '../Container/Types';
-import GridFactory from '../Factory/GridFactory';
-import Entity from '../Models/Entity';
+import Engine from '../Engine/Engine';
 
 @injectable()
 class RecursiveGenerator implements Generator {
+  /**
+   * @member {Engine} engine
+   * @private
+   */
+  private engine: Engine;
 
-  private gridFactory: GridFactory;
-
-  private history: LinkedList<Maze> = new LinkedList<Maze>();
-
-  public constructor (
-    @inject(Types.GridFactory) gridFactory: GridFactory
-  ) {
-    this.gridFactory = gridFactory;
+  /**
+   * @param {Engine} engine 
+   */
+  public constructor (@inject(Types.Engine) engine: Engine) {
+    this.engine = engine;
   }
 
   /**
    * @inheritdoc
    */
-  public generate(width: number, height: number): LinkedList<Maze> {
-    const grid = this.createGrid(width, height);
-    this.history = new LinkedList<Maze>();
-    this.addToHistory(width, height, grid);
+  public generate(width: number, height: number): Maze {
+    this.engine.initialise({ width, height, innerWalled: false });
 
     const isHorizontal = this.chooseOrientation(width, height);
-    this.divide(grid, 0, 0, width, height, isHorizontal);
+    this.divide(0, 0, width, height, isHorizontal);
 
-    return this.history;
-  }
-
-  /**
-   * Create the initial grid
-   * 
-   * @param {number} width 
-   * @param {number} height 
-   * @returns {Array<Array<Node>>}
-   */
-  private createGrid(width: number, height: number): Array<Array<Node>> {
-    return this.gridFactory
-      .setWidth(width)
-      .setHeight(height)
-      .make();
-  }
-
-  /**
-   * Adds a given grid to the history
-   * 
-   * @param {number} width 
-   * @param {number} height
-   * @param {Array<Array<Node>>} grid
-   */
-  private addToHistory(width: number, height: number, grid: Array<Array<Node>>): void {
-    this.history.insertAtEnd(
-      new Maze(width, height, deepClone(grid))
-    );
+    return this.engine.build();
   }
 
   /**
@@ -90,7 +59,6 @@ class RecursiveGenerator implements Generator {
   /**
    * Perform the recursive algorithm on the grid provided
    * 
-   * @param {Array<Array<Node>>} grid 
    * @param {number} x 
    * @param {number} y 
    * @param {number} width 
@@ -98,93 +66,38 @@ class RecursiveGenerator implements Generator {
    * @param {boolean} isHorizontal 
    */
   private divide(
-    grid: Array<Array<Node>>,
     x: number,
     y: number,
     width: number,
     height: number,
-    isHorizontal: boolean,
-    debug: object = {}
+    isHorizontal: boolean
   ): void {
     if (width < 2 || height < 2) {
       return;
     }
 
+    // Adds a wall
     let wx = x + (isHorizontal ? 0 : this.randomNumber(width - 1));
     let wy = y + (isHorizontal ? this.randomNumber(height - 1) : 0);
-    this.addWall(grid, wx, wy, width, height, isHorizontal);
-    this.addToHistory(width, height, grid);
+    this.engine.addWall({ x: wx, y: wy, width, height, isHorizontal })
 
+    // Adds an route though the wall
     const px = wx + (isHorizontal ? this.randomNumber(width, 0) : 0);
     const py = wy + (isHorizontal ? 0 : this.randomNumber(height, 0));
-    this.removeWall(grid, px, py, isHorizontal);
-    this.addToHistory(width, height, grid);
+    this.engine.addEntrance({ x: px, y: py, isHorizontal });
 
     let nx, ny, w, h;
     nx = x;
     ny = y;
     w = isHorizontal ? width : (wx - x + 1);
     h = isHorizontal ? (wy - y + 1) : height;
-    this.divide(grid, nx, ny, w, h, this.chooseOrientation(w, h));
+    this.divide(nx, ny, w, h, this.chooseOrientation(w, h));
 
     nx = isHorizontal ? x : (wx + 1);
     ny = isHorizontal ? (wy + 1) : y;
     w = isHorizontal ? width : (x + width - wx - 1);
     h = isHorizontal ? (y + height - wy - 1) : height;
-    this.divide(grid, nx, ny, w, h, this.chooseOrientation(w, h));
-  }
-
-  /**
-   * Add a wall to the grid
-   * 
-   * @param {Array<Array<Node>>} grid 
-   * @param {number} x 
-   * @param {number} y 
-   * @param {number} width 
-   * @param {number} height 
-   */
-  private addWall(
-    grid: Array<Array<Node>>,
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    isHorizontal: boolean
-  ): void {
-    let i = isHorizontal ? x : y;
-    const end = isHorizontal ? width + x : height + y;
-    for (; i < end; i++) {
-      if (isHorizontal) {
-        grid[i][y].south = Entity.WALL;
-        grid[i][y + 1].north = Entity.WALL;
-      } else {
-        grid[x][i].east = Entity.WALL;
-        grid[x + 1][i].west = Entity.WALL;
-      }
-    }
-  }
-
-  /**
-   * Remove a wall for the passageway through the wall
-   * 
-   * @param {Array<Array<Node>>} grid 
-   * @param {number} x 
-   * @param {number} y 
-   * @param {boolean} isHorizontal 
-   */
-  private removeWall(
-    grid: Array<Array<Node>>,
-    x: number,
-    y: number,
-    isHorizontal: boolean
-  ): void {
-    if (isHorizontal) {
-      grid[x][y].south = grid[x][y + 1];
-      grid[x][y + 1].north = grid[x][y];
-    } else {
-      grid[x][y].east = grid[x + 1][y];
-      grid[x + 1][y].west = grid[x][y];
-    }
+    this.divide(nx, ny, w, h, this.chooseOrientation(w, h));
   }
 }
 

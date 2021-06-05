@@ -1,18 +1,52 @@
 import Entity from "./Entity";
+import Point from "./Point";
 
 class Node {
+  /**
+   * @member {Entity} DEFAULT_VALUE
+   * @private
+   * @static
+   * @readonly
+   */
+  private static readonly DEFAULT_VALUE = Entity.WALL;
 
-  private static readonly DEFAULT_VALUE = Entity.WALL; 
+  /**
+   * @member {Point} coordinate
+   * @private
+   * @readonly
+   */
+  public readonly coordinate: Point;
 
-  public north: Node | Entity = Node.DEFAULT_VALUE;
+  /**
+   * @member {Node | Entity} north
+   * @public
+   */
+  public north: Node | Entity;
 
-  public east: Node | Entity = Node.DEFAULT_VALUE;
+  /**
+   * @member {Node | Entity} north
+   * @public
+   */
+  public east: Node | Entity;
   
-  public south: Node | Entity = Node.DEFAULT_VALUE;
+  /**
+   * @member {Node | Entity} north
+   * @public
+   */
+  public south: Node | Entity;
   
-  public west: Node | Entity = Node.DEFAULT_VALUE;
+  /**
+   * @member {Node | Entity} north
+   * @public
+   */
+  public west: Node | Entity;
 
-  public constructor (defaultValue: Entity = Node.DEFAULT_VALUE) {
+  /**
+   * @param {Point} coordinate 
+   * @param {Entity} defaultValue 
+   */
+  public constructor (coordinate: Point, defaultValue: Entity = Node.DEFAULT_VALUE) {
+    this.coordinate = coordinate;
     this.north = defaultValue;
     this.east = defaultValue;
     this.south = defaultValue;

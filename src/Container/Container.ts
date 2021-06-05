@@ -1,10 +1,10 @@
 import 'reflect-metadata'
 import { Container, ContainerModule } from 'inversify'
-import Bindings from './Bindings';
+import EngineBindings from './EngineBindings';
 import GeneratorBindings from './GeneratorBindings';
 
-const bindings = new ContainerModule((bind) => {
-  Bindings(bind)
+const engineBindings = new ContainerModule((bind) => {
+  EngineBindings(bind)
 });
 
 const generatorBindings = new ContainerModule((bind) => {
@@ -12,6 +12,6 @@ const generatorBindings = new ContainerModule((bind) => {
 });
 
 const container = new Container();
-container.load(bindings, generatorBindings);
+container.load(engineBindings, generatorBindings);
 
 export default container;

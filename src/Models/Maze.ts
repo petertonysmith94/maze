@@ -1,22 +1,59 @@
-import Node from './Node';
+import LinkedList from '../Utils/LinkedList';
+import PipelineOperation from '../Engine/PipelineOperation';
+import Grid from './Grid';
 
 class Maze {
+  /**
+   * @member {number} width
+   * @private
+   */
+  private readonly width: number;
 
-  private width: number;
+  /**
+   * @member {number} height
+   * @private
+   */
+  private readonly height: number;
 
-  private height: number;
+  /**
+   * @member {Grid} grid
+   * @private
+   */
+  private readonly grid: Grid;
 
-  private grid: Array<Array<Node>>;
+  /**
+   * @member {LinkedList<Grid>} history
+   * @private
+   */
+  public readonly history: LinkedList<Grid>;
 
-  public constructor (width: number, height: number, grid: Array<Array<Node>>) {
-    this.width = width;
-    this.height = height;
+  /**
+   * @member {LinkedList<PipelineOperation>} history
+   * @private
+   */
+  private readonly operations: LinkedList<PipelineOperation>;
+
+  /**
+   * @param {Grid} grid 
+   * @param {LinkedList<Grid>} history 
+   * @param {LinkedList<PipelineOperation>} operations 
+   */
+  public constructor (
+    grid: Grid,
+    history: LinkedList<Grid>,
+    operations: LinkedList<PipelineOperation>,
+  ) {
+    this.width = grid.length;
+    this.height = grid[0].length;
     this.grid = grid;
+    this.history = history;
+    this.operations = operations;
   }
 
+  /**
+   * Prints out the grid.
+   */
   public print(): void {
-    let gridString = '';
-
     for (let x = 0; x < this.width; x++) {
       console.group({ x });
 
@@ -27,12 +64,21 @@ class Maze {
       
       console.groupEnd();
     }
+  }
 
-    // console.log({
-    //   width: this.width,
-    //   height: this.height,
-    //   grid: gridString
-    // });
+  /**
+   * Prints all the operation
+   */
+  public printOperations(): void {
+    let iterator = this.operations.head;
+
+    while (iterator) {
+      console.log({
+        type: iterator.data.type,
+        ...iterator.data.options
+      });
+      iterator = iterator.next;
+    }
   }
 }
 
