@@ -1,25 +1,48 @@
 import Grid from '../Models/Grid';
 import Maze from '../Models/Maze';
-import LinkedList, { Node } from '../Utils/LinkedList';
+import { Node } from '../Utils/LinkedList';
 
 class Browser {
+  /**
+   * @member {Maze} maze
+   * @private
+   */
+  private instance: Maze;
 
-  private maze: Maze;
-
+  /**
+   * @member {Grid | null} current
+   * @private
+   */
   private current: Node<Grid> | null;
 
+  /**
+   * @param {Maze} maze 
+   */
   public constructor(maze: Maze) {
-    this.maze = maze;
+    this.instance = maze;
     this.current = maze.history.head;
   }
 
+  /**
+   * Obtain the maze
+   * 
+   * @returns {Maze}
+   */
+  public get maze(): Maze {
+    return this.instance;
+  }
 
+  /**
+   * Obtain the current grid
+   * 
+   * @returns {Grid | null}
+   */
   public get grid(): Grid | null {
     return this.current?.data || null;
   }
 
   /**
-   * Revert back to the first iteration of the maze
+   * Sets to the first iteration of the grid
    */
   first(): void {
     if (this.current) {
@@ -30,7 +53,7 @@ class Browser {
   }
 
   /**
-   * 
+   * Sets to the previous iteration of the grid
    */
   previous(): void {
     if (this.current && this.current.previous) {
@@ -39,7 +62,7 @@ class Browser {
   }
 
   /**
-   * 
+   * Sets to the next iteration of the grid
    */
   next(): void {
     if (this.current && this.current.next) {
@@ -48,7 +71,7 @@ class Browser {
   }
 
   /**
-   * 
+   * Sets to the last iteration of the grid
    */
   last(): void {
     if (this.current) {

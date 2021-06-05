@@ -8,7 +8,6 @@ import PipelineOperation from '../PipelineOperation';
 
 @injectable()
 class AddWallOperation implements Operation {
-
   /**
    * Obtains the pipeline operation
    * 
@@ -23,10 +22,11 @@ class AddWallOperation implements Operation {
   }
 
   /**
+   * Adds a wall to the grid
    * 
-   * @param grid 
-   * @param options 
-   * @returns 
+   * @param {Grid} grid 
+   * @param {AddWallOptions} options 
+   * @returns {Grid}
    */
   public invoke(grid: Grid, options: AddWallOptions): Grid {
     const { x, y, width, height, isHorizontal } = options;

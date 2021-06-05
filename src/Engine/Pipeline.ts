@@ -5,10 +5,8 @@ import Operation from './Operations/Operation';
 import PipelineOperation from './PipelineOperation';
 import LinkedList from '../Utils/LinkedList';
 import OperationType from './Operations/OperationType';
-import InitialiseOperation from './Operations/InitialiseOperation';
 import InvalidOperationException from '../Exceptions/InvalidOperationException';
 import Types from '../Container/Types';
-import InitialiseOptions from './Options/InitialiseOptions';
 import Maze from '../Models/Maze';
 
 @injectable()
@@ -34,31 +32,33 @@ class Pipeline
    */
   public operations: LinkedList<PipelineOperation> = new LinkedList<PipelineOperation>();
 
+  /**
+   * @member {LinkedList<Grid>}
+   * @private
+   */
   public timeline: LinkedList<Grid> = new LinkedList<Grid>();
 
+  /**
+   * @member {Grid | undefined}
+   * @private
+   */
   public pointer: Grid | undefined;
 
-
-
+  /**
+   * @param {interfaces.Factory<Operation>} operationsFactory 
+   */
   public constructor(
     @inject(Types.OperationFactory) operationsFactory: interfaces.Factory<Operation>
   ) {
     this.operationsFactory = operationsFactory;
   }
 
-  public get maze(): Maze {
-    if (this.pointer === undefined) {
-      throw new Error('The grid has not yet been initialised');
-    }
-
-    return new Maze(
-      this.pointer,
-      this.timeline,
-      this.operations
-    );
-  }
-
-  public initialise(operation: PipelineOperation) {
+  /**
+   * Initialises the pipeline for processing.
+   * 
+   * @param {PipelineOperation} operation
+   */
+  public initialise(operation: PipelineOperation): void {
     this.operations = new LinkedList<PipelineOperation>();
     this.timeline = new LinkedList<Grid>();
     this.pointer = Grid.instance(1, 1);
@@ -86,9 +86,10 @@ class Pipeline
   }
 
   /**
+   * Finds an operation, either from cache or creates a new instance.
    * 
-   * @param operation 
-   * @returns 
+   * @param {PipelineOperation} operation 
+   * @returns {Operation}
    */
   private find(operation: PipelineOperation): Operation {
     let op: Operation | undefined = this.cache.get(operation.type);
@@ -98,6 +99,23 @@ class Pipeline
       this.cache.set(operation.type, op);
     }
     return op;
+  }
+
+  /**
+   * Build a maze
+   * 
+   * @returns {Maze}
+   */
+   public build(): Maze {
+    if (this.pointer === undefined) {
+      throw new Error('The grid has not yet been initialised');
+    }
+
+    return new Maze(
+      this.pointer,
+      this.timeline,
+      this.operations
+    );
   }
 }
 

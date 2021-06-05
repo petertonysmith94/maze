@@ -8,22 +8,23 @@ import AddEntranceOptions from './Options/AddEntranceOptions';
 import InitialiseOptions from './Options/InitialiseOptions';
 import AddWallOptions from './Options/AddWallOptions';
 import Engine from "./Engine";
-import Entity from "../Models/Entity";
 import Pipeline from "./Pipeline";
-import OperationType from "./Operations/OperationType";
 import InitialiseOperation from "./Operations/InitialiseOperation";
 import AddWallOperation from "./Operations/AddWallOperation";
 import AddEntranceOperation from "./Operations/AddEntranceOperation";
-import PipelineOperation from "./PipelineOperation";
-import { Node } from "../Utils/LinkedList";
-import InvalidOperationException from "../Exceptions/InvalidOperationException";
-import InvalidArgumentException from "../Exceptions/InvalidArgumentException";
 
 @injectable()
 class HistoryEngine implements Engine {
-
+  /**
+   * @member {Pipeline}
+   * @private
+   * @readonly
+   */
   private readonly pipeline: Pipeline;
 
+  /**
+   * @param {Pipeline} pipeline
+   */
   public constructor(@inject(Types.Pipeline) pipeline: Pipeline) {
     this.pipeline = pipeline;
   }
@@ -62,7 +63,7 @@ class HistoryEngine implements Engine {
    * @inheritdoc
    */
   public build(): Maze {
-    return this.pipeline.maze;
+    return this.pipeline.build();
   }
 }
 

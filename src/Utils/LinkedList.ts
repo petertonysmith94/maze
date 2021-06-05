@@ -28,9 +28,18 @@ class Node<T> {
 }
 
 class LinkedList<T> {
-
+  /**
+   * @member {Node<T> | null} headElement
+   * @private
+   */
   private headElement: Node<T> | null = null;
 
+  /**
+   * Insert an element to the end of the list
+   * 
+   * @param {T} data 
+   * @returns {Node<T>}
+   */
   public insertAtEnd(data: T): Node<T> {
     const node = new Node(data);
 
@@ -44,6 +53,11 @@ class LinkedList<T> {
     return node;
   }
 
+  /**
+   * Delete a given node from a list
+   * 
+   * @param {Node<T>} node 
+   */
   public deleteNode(node: Node<T>): void {
     if (!node.previous) {
       this.headElement = node.next;
@@ -57,12 +71,29 @@ class LinkedList<T> {
     }
   }
 
-  toArray(): T[] {
-    throw new Error("Method not implemented.");
+  /**
+   * Converts list to an array
+   * 
+   * @returns {Array<T>}
+   */
+  public toArray(): Array<T> {
+    const result = Array<T>();
+    let iterator = this.headElement;
+
+    while (iterator) {
+      result.push(iterator.data);
+      iterator = iterator.next;
+    }
+    return result;
   }
 
-  size(): number {
-    throw new Error("Method not implemented.");
+  /**
+   * Obtain the size of the list
+   * 
+   * @returns {number}
+   */
+  public size(): number {
+    return this.toArray().length;
   }
 
   /**

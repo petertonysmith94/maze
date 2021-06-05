@@ -1,9 +1,8 @@
 import { inject, injectable, interfaces } from "inversify";
 import Types from "../Container/Types";
-import GeneratorAlgorithm from "../Generators/GeneratorAlgorithm";
-import Generator from "../Generators/Generator";
+import GeneratorAlgorithm from "./GeneratorAlgorithm";
+import Generator from "./Generator";
 import InvalidArgumentException from "../Exceptions/InvalidArgumentException";
-import LinkedList from "../Utils/LinkedList";
 import Maze from "../Models/Maze";
 import Factory = interfaces.Factory;
 
@@ -82,6 +81,7 @@ class MazeFactory {
    * Generates a new maze
    * 
    * @returns {Maze}
+   * @throws {InvalidArgumentException}
    */
   public make(): Maze {
     if (undefined === this.width) {

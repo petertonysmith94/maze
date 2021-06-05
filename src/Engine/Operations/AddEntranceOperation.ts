@@ -20,6 +20,13 @@ class AddEntranceOperation implements Operation {
     };
   }
 
+  /**
+   * Adds an entrance to the grid
+   * 
+   * @param {Grid} grid 
+   * @param {AddEntranceOptions} options 
+   * @returns {Grid}
+   */
   public invoke(grid: Grid,options: AddEntranceOptions): Grid {
     const { x, y, isHorizontal } = options;
 

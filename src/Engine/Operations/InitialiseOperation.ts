@@ -1,9 +1,6 @@
 import { injectable } from 'inversify';
 import InvalidArgumentException from '../../Exceptions/InvalidArgumentException';
 import Grid from "../../Models/Grid";
-import Node from '../../Models/Node';
-import Point from '../../Models/Point';
-import Entity from '../../Models/Entity';
 import InitialiseOptions from '../Options/InitialiseOptions';
 import Operation from './Operation';
 import OperationType from './OperationType';
@@ -24,6 +21,13 @@ class InitialiseOperation implements Operation {
     };
   }
   
+  /**
+   * Initialises the grid
+   * 
+   * @param {Grid} grid 
+   * @param {AddWallOptions} options 
+   * @returns {Grid}
+   */
   public invoke(grid: Grid, options: InitialiseOptions): Grid {
     this.validateOptions(options);
     return this.buildGrid(options);
@@ -58,8 +62,6 @@ class InitialiseOperation implements Operation {
 
     let grid = Grid.instance(width, height);
 
-    console.log(this);
-
     if (!innerWalled) {
       grid = this.emptyInnerGrid(width, height, grid);
     }
@@ -67,6 +69,14 @@ class InitialiseOperation implements Operation {
     return grid;
   }
 
+  /**
+   * Empties the inner grid of walls
+   * 
+   * @param {number} width 
+   * @param {number} height 
+   * @param {Grid} grid 
+   * @returns {Grid}
+   */
   private emptyInnerGrid(width: number, height: number, grid: Grid): Grid {
     let nx, ny;
 
@@ -92,6 +102,15 @@ class InitialiseOperation implements Operation {
     return grid;
   }
 
+  /**
+   * Check whether the x and y position are within the bound
+   * 
+   * @param {number} x 
+   * @param {number} y 
+   * @param {number} width 
+   * @param {number} height 
+   * @returns {boolean}
+   */
   private withinInnerBounds(x: number, y: number, width: number, height: number): boolean {
     return x < (width) && x >= 0 && y < (height) && y >= 0;
   }
