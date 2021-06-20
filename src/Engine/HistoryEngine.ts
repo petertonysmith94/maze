@@ -1,8 +1,5 @@
 import { inject, injectable } from "inversify";
-import { LinkedList } from "..";
-import { cloneDeep as deepClone } from 'lodash';
 import Types from "../Container/Types";
-import Grid from "../Models/Grid";
 import Maze from "../Models/Maze";
 import AddEntranceOptions from './Options/AddEntranceOptions';
 import InitialiseOptions from './Options/InitialiseOptions';
@@ -12,6 +9,8 @@ import Pipeline from "./Pipeline";
 import InitialiseOperation from "./Operations/InitialiseOperation";
 import AddWallOperation from "./Operations/AddWallOperation";
 import AddEntranceOperation from "./Operations/AddEntranceOperation";
+import TransformationOperation from "./Operations/TransformationOperation";
+import TransformationOptions from "./Options/TransformationOptions";
 
 @injectable()
 class HistoryEngine implements Engine {
@@ -42,6 +41,15 @@ class HistoryEngine implements Engine {
   /**
    * @inheritdoc
    */
+  public load(maze: Maze): Engine {
+    this.pipeline.load(maze);
+
+    return this;
+  }
+
+  /**
+   * @inheritdoc
+   */
   public addWall(options: AddWallOptions): Engine {
     const op = AddWallOperation.operation(options);
     this.pipeline.add(op);
@@ -54,6 +62,16 @@ class HistoryEngine implements Engine {
    */
   public addEntrance(options: AddEntranceOptions): Engine {
     const op = AddEntranceOperation.operation(options);
+    this.pipeline.add(op);
+
+    return this;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public transfom(options: TransformationOptions): Engine {
+    const op = TransformationOperation.operation(options);
     this.pipeline.add(op);
 
     return this;

@@ -21,6 +21,7 @@ class Browser {
   public constructor(maze: Maze) {
     this.instance = maze;
     this.current = maze.history.head;
+    this.last();
   }
 
   /**

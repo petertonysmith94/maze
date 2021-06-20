@@ -2,36 +2,35 @@ import LinkedList from '../Utils/LinkedList';
 import PipelineOperation from '../Engine/PipelineOperation';
 import Grid from './Grid';
 
+/**
+ * A maze consists of the generation steps required to setup the
+ * final grid and the operations required.
+ */
 class Maze {
   /**
    * @member {number} width
-   * @private
    */
-  private readonly width: number;
+  public readonly width: number;
 
   /**
    * @member {number} height
-   * @private
    */
-  private readonly height: number;
+   public readonly height: number;
 
   /**
    * @member {Grid} grid
-   * @private
    */
-  private readonly grid: Grid;
+  public readonly grid: Grid;
 
   /**
    * @member {LinkedList<Grid>} history
-   * @private
    */
   public readonly history: LinkedList<Grid>;
 
   /**
    * @member {LinkedList<PipelineOperation>} history
-   * @private
    */
-  private readonly operations: LinkedList<PipelineOperation>;
+  public readonly operations: LinkedList<PipelineOperation>;
 
   /**
    * @param {Grid} grid 

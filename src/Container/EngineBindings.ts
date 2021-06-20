@@ -11,6 +11,7 @@ import AddWallOperation from '../Engine/Operations/AddWallOperation';
 import InitialiseOperation from '../Engine/Operations/InitialiseOperation';
 
 import Bind = interfaces.Bind;
+import TransformationOperation from '../Engine/Operations/TransformationOperation';
 
 export default (bind: Bind) => {
   bind<Engine>(Types.Engine).to(HistoryEngine);
@@ -37,4 +38,8 @@ export default (bind: Bind) => {
   bind<Operation>(Types.Operation)
     .to(AddWallOperation)
     .whenTargetNamed(OperationType.ADD_WALL);
+
+  bind<Operation>(Types.Operation)
+    .to(TransformationOperation)
+    .whenTargetNamed(OperationType.TRANSFORMATION);
 };

@@ -1,7 +1,8 @@
 import Entity from "./Entity";
 import Point from "./Point";
+import INode from './INode';
 
-class Node {
+class Node implements INode {
   /**
    * @member {Entity} DEFAULT_VALUE
    * @private
@@ -45,12 +46,18 @@ class Node {
    * @param {Point} coordinate 
    * @param {Entity} defaultValue 
    */
-  public constructor (coordinate: Point, defaultValue: Entity = Node.DEFAULT_VALUE) {
+  public constructor (
+    coordinate: Point,
+    north: Node | Entity = Node.DEFAULT_VALUE,
+    east: Node | Entity = Node.DEFAULT_VALUE,
+    south: Node | Entity = Node.DEFAULT_VALUE,
+    west: Node | Entity = Node.DEFAULT_VALUE
+  ) {
     this.coordinate = coordinate;
-    this.north = defaultValue;
-    this.east = defaultValue;
-    this.south = defaultValue;
-    this.west = defaultValue;
+    this.north = north;
+    this.east = east;
+    this.south = south;
+    this.west = west;
   }
 }
 

@@ -1,10 +1,14 @@
-import { injectable } from 'inversify';
+import { injectable, interfaces } from 'inversify';
 import container from "./Container/Container";
 import Types from "./Container/Types";
 import LinkedList from "./Utils/LinkedList";
 import GeneratorAlgorithm from "./Generators/GeneratorAlgorithm";
 import Maze from './Models/Maze';
 import MazeFactory from './Generators/MazeFactory';
+import MazeSolution from './Models/MazeSolution';
+import Point from './Models/Point';
+import SolverAlgorithms from './Solver/SolverAlgorithms';
+import Solver from './Solver/Solver';
 
 @injectable()
 class Client {
@@ -14,8 +18,12 @@ class Client {
    */
   private mazeFactory: MazeFactory;
 
+
+  private solverFactory: interfaces.Factory<Solver>;
+
   public constructor() {
     this.mazeFactory = container.get<MazeFactory>(Types.MazeFactory);
+    this.solverFactory = container.get<interfaces.Factory<Solver>>(Types.SolverFactory);
   }
 
   /**
@@ -32,6 +40,12 @@ class Client {
       .setHeight(height)
       .setAlgorithm(algorithm)
       .make();
+  }
+
+
+  public solve(maze: Maze, start: Point, finish: Point, algorithm: SolverAlgorithms): MazeSolution | null {
+    const solver = <Solver> this.solverFactory(algorithm);
+    return solver.solve(maze, start, finish);
   }
 }
 
