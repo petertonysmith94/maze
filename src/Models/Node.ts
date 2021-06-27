@@ -1,10 +1,8 @@
 import Entity from "./Entity";
 import Point from "./Point";
 import INode from './INode';
-import Renderable from "../Decorators/Renderable";
-import styled from 'styled-components';
 
-class Node implements INode, Renderable {
+class Node implements INode {
   /**
    * @member {Entity} DEFAULT_VALUE
    * @private
@@ -60,16 +58,6 @@ class Node implements INode, Renderable {
     this.east = east;
     this.south = south;
     this.west = west;
-  }
-
-  public render(): any {
-    const Comp = styled.div`
-    
-    `;
-
-    return `
-      <Comp>(${ this.coordinate.x }, ${ this.coordinate.y })</Comp>
-    `;
   }
 }
 
