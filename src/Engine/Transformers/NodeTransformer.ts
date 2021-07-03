@@ -5,17 +5,6 @@ import Node from "../../Models/Node";
 import Neighbours, { Direction, getOpposite } from "../../Models/NodeNeighbours";
 import Transformer from "./Transformer";
 
-type Key = keyof Omit<Node, 'coordinate' | 'east' | 'south'>
-
-type Opposite = keyof Omit<Node, 'coordinate' | 'north' | 'west'>
-
-type KeyMap = { [key in Key]: Opposite };
-
-const Mappings: KeyMap = {
-  'north': 'south',
-  'west': 'east'
-}
-
 type CoordinateTranslationFunction = (coordinate: Coordinate) => Coordinate;
 
 type DirectionMap = { [direction in Direction]: CoordinateTranslationFunction }
@@ -101,7 +90,7 @@ abstract class NodeTransformer implements Transformer {
    * @param {Node} node 
    * @returns {Node}
    */
-  abstract generate(node: Node): Node;
+  abstract generate(node: INode): INode;
 }
 
 export default NodeTransformer;

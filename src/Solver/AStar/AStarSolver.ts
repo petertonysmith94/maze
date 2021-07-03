@@ -8,7 +8,7 @@ import MazeSolution from '../../Models/MazeSolution';
 import Point from '../../Models/Point';
 import EuclidianDistance from '../Heuristics/EuclidianDistance';
 import Heuristic from '../Heuristics/Heuristic';
-import Solver from '../Solver';
+import BaseSolver from '../BaseSolver';
 import AStarNode from './AStarNode';
 import Neighbour from './Neighbour';
 import NodeNeighbours, { Direction, DiagonalNeighbours } from '../../Models/NodeNeighbours';
@@ -17,7 +17,7 @@ import { LinkedList } from '../..';
 import Node from '../../Models/Node';
 
 @injectable()
-class AStarSolver implements Solver {
+class AStarSolver extends BaseSolver {
 
   private static readonly ADJACENT_COST = 10;
 
@@ -29,7 +29,7 @@ class AStarSolver implements Solver {
    */
   private engine: Engine;
 
-  private readonly heuristic: Heuristic;
+  private heuristic: Heuristic;
 
   private transformer: AStarTransformer;
 
@@ -41,6 +41,7 @@ class AStarSolver implements Solver {
   public constructor (
     @inject(Types.Engine) engine: Engine
   ) {
+    super();
     this.engine = engine;
     this.transformer = new AStarTransformer();
     this.heuristic = new EuclidianDistance();
@@ -98,9 +99,7 @@ class AStarSolver implements Solver {
         }
       }
     }
-
     return null;
-
   }
 
   private generatePath(node: AStarNode): LinkedList<Point> {
@@ -113,31 +112,6 @@ class AStarSolver implements Solver {
     }
     return path;
   }
-
-
-  /**
-   * Validate that the start and finish points within limits
-   * 
-   * @param {Maze} maze 
-   * @param {Point} start 
-   * @param {Point} end 
-   * 
-   * @throws {InvalidArgumentException}
-   */
-  private validate(maze: Maze, start: Point, end: Point): void {
-    if (!start.withBounds(maze.width, maze.height)) {
-      throw new InvalidArgumentException(
-        'The starting point lies outside the maze bounds.'
-      )
-    }
-
-    if (!end.withBounds(maze.width, maze.height)) {
-      throw new InvalidArgumentException(
-        'The starting point lies outside the maze bounds.'
-      )
-    }
-  }
-
 
   private find(point: Point): AStarNode {
     const index = findIndex(this.lookupTable, (node) =>

@@ -1,6 +1,6 @@
 import Node from './Node';
 
-type Direction = keyof Omit<Node, 'coordinate'>;
+type Direction = keyof Omit<Node, 'coordinate' | 'render'>;
 
 const Neighbours: Array<Direction> = ['north', 'east', 'south', 'west'];
 
