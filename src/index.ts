@@ -11,6 +11,10 @@ import Entity from './Models/Entity';
 import Grid from './Models/Grid';
 import Maze from './Models/Maze';
 import Node from './Models/Node';
+import Point from './Models/Point';
+
+// Solvers
+import SolverAlgorithms from './Solver/SolverAlgorithms';
 
 // Utils
 import LinkedList, { Node as LinkedListNode } from './Utils/LinkedList';
@@ -29,6 +33,10 @@ export {
   Grid,
   Maze,
   Node,
+  Point,
+
+  // Solvers
+  SolverAlgorithms,
 
   // Utils
   LinkedList,

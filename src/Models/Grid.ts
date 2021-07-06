@@ -1,8 +1,8 @@
-import Entity from './Entity';
+import INode from './INode';
 import Node from './Node';
 import Point from './Point';
 
-class Grid extends Array<Array<Node>> {
+class Grid extends Array<Array<INode>> {
   /**
    * Creates a grid instance
    * 
@@ -13,7 +13,7 @@ class Grid extends Array<Array<Node>> {
   public static instance(width: number, height: number): Grid {
     return Array.from({ length: width }, (_, x: number) => 
       Array.from({ length: height }, (_, y: number) => 
-        new Node(new Point(x, y), Entity.WALL)
+        new Node(new Point(x, y))
       )
     );
   }

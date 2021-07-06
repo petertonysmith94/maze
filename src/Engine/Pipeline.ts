@@ -67,6 +67,17 @@ class Pipeline
   }
 
   /**
+   * Loads a maze into the pipeline
+   * 
+   * @param {Maze} maze
+   */
+  public load(maze: Maze): void {
+    this.operations = cloneDeep(maze.operations);
+    this.timeline = cloneDeep(maze.history);
+    this.pointer = cloneDeep(maze.grid);
+  }
+
+  /**
    * Adds the operation, and runs it against the previous grid.
    * 
    * @param {Operation} operation

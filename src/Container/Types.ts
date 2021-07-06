@@ -9,6 +9,9 @@ export default {
   GeneratorFactory: Symbol.for('GeneratorFactory'),
   Generator: Symbol.for('Generator'),
 
+  // Solvers
+  SolverFactory: Symbol.for('SolverFactory'),
+  Solver: Symbol.for('Solver'),
 
   // History
   Pipeline: Symbol.for('Pipeline'),
